@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchRenderNumber } from "./counterSlice";
 import {
   decrement,
   increment,
   incrementByAmount,
   incrementAsync,
   selectCount,
-} from './counterSlice';
-import styles from './Counter.module.css';
+  resateCounter,
+} from "./counterSlice";
+import styles from "./Counter.module.css";
 
 export function Counter() {
-  const count = useSelector(selectCount);
+  const counter = useSelector(selectCount);
   const dispatch = useDispatch();
-  const [incrementAmount, setIncrementAmount] = useState('2');
+  if (counter.isLoading) {
+    return <div>Loadding....</div>;
+  }
 
   return (
     <div>
@@ -24,7 +28,7 @@ export function Counter() {
         >
           +
         </button>
-        <span className={styles.value}>{count}</span>
+        <span className={styles.value}>{counter.value}</span>
         <button
           className={styles.button}
           aria-label="Decrement value"
@@ -34,25 +38,18 @@ export function Counter() {
         </button>
       </div>
       <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          onChange={e => setIncrementAmount(e.target.value)}
-        />
         <button
           className={styles.button}
-          onClick={() =>
-            dispatch(incrementByAmount(Number(incrementAmount) || 0))
-          }
+          onClick={() => dispatch(resateCounter())}
         >
-          Add Amount
+          Resate Counter
         </button>
+
         <button
           className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(Number(incrementAmount) || 0))}
+          onClick={() => dispatch(fetchRenderNumber())}
         >
-          Add Async
+          Fetch async button
         </button>
       </div>
     </div>
